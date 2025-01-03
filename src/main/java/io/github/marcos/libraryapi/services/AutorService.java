@@ -34,8 +34,22 @@ public class AutorService {
 
     @Transactional(readOnly = true)
     public List<AutorResponseDTO> findByFilters(String nome, String nacionalidade){
-        List<Autor> autores = autorRepository.findByNomeAndNacionalidade(nome, nacionalidade);
-        return autores.stream()
+        if(!nome.isEmpty() && nacionalidade.isEmpty()) {
+            return autorRepository.findByNomeAndNacionalidade(nome, nacionalidade).stream()
+                    .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
+                    .toList();
+        }
+        if(!nome.isEmpty()){
+            return autorRepository.findByNome(nome).stream()
+                    .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
+                    .toList();
+        }
+        if(!nacionalidade.isEmpty()){
+            return autorRepository.findByNacionalidade(nacionalidade).stream()
+                    .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
+                    .toList();
+        }
+        return autorRepository.findAll().stream()
                 .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
                 .toList();
     }

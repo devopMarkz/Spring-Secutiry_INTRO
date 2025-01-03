@@ -35,8 +35,8 @@ public class AutorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", defaultValue = "") String nome,
-                                                                      @RequestParam(name = "nacionalidade", defaultValue = "") String nacionalidade){
+    public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
+                                                                      @RequestParam(name = "nacionalidade", defaultValue = "", required = false) String nacionalidade){
         var autores = autorService.findByFilters(nome, nacionalidade);
         return ResponseEntity.ok(autores);
     }
