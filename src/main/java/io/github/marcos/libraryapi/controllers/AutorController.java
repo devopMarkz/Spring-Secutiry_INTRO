@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/autores")
@@ -31,6 +32,13 @@ public class AutorController {
     public ResponseEntity<AutorResponseDTO> obterDetalhes(@PathVariable("id") String id){
         var autorDTO = autorService.findById(id);
         return ResponseEntity.ok(autorDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", defaultValue = "") String nome,
+                                                                      @RequestParam(name = "nacionalidade", defaultValue = "") String nacionalidade){
+        var autores = autorService.findByFilters(nome, nacionalidade);
+        return ResponseEntity.ok(autores);
     }
 
     @DeleteMapping("/{id}")

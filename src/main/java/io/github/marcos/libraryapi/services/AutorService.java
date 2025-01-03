@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,6 +30,14 @@ public class AutorService {
         var idAutor = UUID.fromString(id);
         Autor autor = autorRepository.findById(idAutor).orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
         return new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade());
+    }
+
+    @Transactional(readOnly = true)
+    public List<AutorResponseDTO> findByFilters(String nome, String nacionalidade){
+        List<Autor> autores = autorRepository.findByNomeAndNacionalidade(nome, nacionalidade);
+        return autores.stream()
+                .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
+                .toList();
     }
 
     @Transactional
