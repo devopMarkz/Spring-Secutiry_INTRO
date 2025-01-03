@@ -31,4 +31,11 @@ public class AutorService {
         return new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade());
     }
 
+    @Transactional
+    public void deleteById(String id){
+        var idAutor = UUID.fromString(id);
+        Autor autor = autorRepository.findById(idAutor).orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
+        autorRepository.deleteById(autor.getId());
+    }
+
 }

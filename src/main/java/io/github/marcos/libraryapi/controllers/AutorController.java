@@ -28,9 +28,15 @@ public class AutorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AutorResponseDTO> obterDetalher(@PathVariable("id") String id){
+    public ResponseEntity<AutorResponseDTO> obterDetalhes(@PathVariable("id") String id){
         var autorDTO = autorService.findById(id);
         return ResponseEntity.ok(autorDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPorId(@PathVariable("id") String id){
+        autorService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
