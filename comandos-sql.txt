@@ -2,7 +2,10 @@ CREATE TABLE IF NOT EXISTS autor(
 	id UUID not null primary key,
 	nome VARCHAR(100) not null,
 	data_nascimento date not null,
-	nacionalidade VARCHAR(50) not null
+	nacionalidade VARCHAR(50) not null,
+	data_cadastro timestamp,
+	data_atualizacao timestamp,
+	id_usuario uuid
 );
 
 CREATE TABLE IF NOT EXISTS livro(
@@ -12,6 +15,9 @@ CREATE TABLE IF NOT EXISTS livro(
 	data_publicacao date not null,
 	genero VARCHAR(30) not null,
 	preco numeric(18,2),
+	data_cadastro timestamp,
+    data_atualizacao timestamp,
+    id_usuario uuid,
 	id_autor UUID not null references autor(id),
 	constraint chk_genero check(genero in('FICCAO', 'FANTASIA', 'MISTERIO', 'ROMANCE', 'BIOGRAFIA', 'CIENCIA'))
 );
