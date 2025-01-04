@@ -2,6 +2,7 @@ package io.github.marcos.libraryapi.controllers;
 
 import io.github.marcos.libraryapi.dto.AutorResponseDTO;
 import io.github.marcos.libraryapi.dto.CreateAutorDTO;
+import io.github.marcos.libraryapi.dto.UpdateAutorDTO;
 import io.github.marcos.libraryapi.services.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,8 @@ public class AutorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", defaultValue = "", required = false) String nome,
-                                                                      @RequestParam(name = "nacionalidade", defaultValue = "", required = false) String nacionalidade){
+    public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", required = false) String nome,
+                                                                      @RequestParam(name = "nacionalidade", required = false) String nacionalidade){
         var autores = autorService.findByFilters(nome, nacionalidade);
         return ResponseEntity.ok(autores);
     }
@@ -44,6 +45,12 @@ public class AutorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPorId(@PathVariable("id") String id){
         autorService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> atualizarPorId(@PathVariable("id") String id, @RequestBody UpdateAutorDTO dto){
+        autorService.updateById(id, dto);
         return ResponseEntity.noContent().build();
     }
 
