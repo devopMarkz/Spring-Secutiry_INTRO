@@ -1,4 +1,4 @@
-package io.github.marcos.libraryapi.dto;
+package io.github.marcos.libraryapi.dto.autor;
 
 import java.time.LocalDate;
 import java.util.UUID;

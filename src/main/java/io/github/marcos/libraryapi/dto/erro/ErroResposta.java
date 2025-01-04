@@ -1,4 +1,4 @@
-package io.github.marcos.libraryapi.dto;
+package io.github.marcos.libraryapi.dto.erro;
 
 import org.springframework.http.HttpStatus;
 

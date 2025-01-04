@@ -1,8 +1,8 @@
 package io.github.marcos.libraryapi.services;
 
-import io.github.marcos.libraryapi.dto.AutorResponseDTO;
-import io.github.marcos.libraryapi.dto.CreateAutorDTO;
-import io.github.marcos.libraryapi.dto.UpdateAutorDTO;
+import io.github.marcos.libraryapi.dto.autor.AutorResponseDTO;
+import io.github.marcos.libraryapi.dto.autor.CreateAutorDTO;
+import io.github.marcos.libraryapi.dto.autor.UpdateAutorDTO;
 import io.github.marcos.libraryapi.model.Autor;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
 import io.github.marcos.libraryapi.repositories.LivroRepository;

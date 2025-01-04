@@ -1,4 +1,4 @@
-package io.github.marcos.libraryapi.dto;
+package io.github.marcos.libraryapi.dto.autor;
 
 import io.github.marcos.libraryapi.model.Autor;
 import jakarta.validation.constraints.NotBlank;

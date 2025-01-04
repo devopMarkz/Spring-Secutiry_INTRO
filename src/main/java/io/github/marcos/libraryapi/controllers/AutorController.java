@@ -1,8 +1,8 @@
 package io.github.marcos.libraryapi.controllers;
 
-import io.github.marcos.libraryapi.dto.AutorResponseDTO;
-import io.github.marcos.libraryapi.dto.CreateAutorDTO;
-import io.github.marcos.libraryapi.dto.UpdateAutorDTO;
+import io.github.marcos.libraryapi.dto.autor.AutorResponseDTO;
+import io.github.marcos.libraryapi.dto.autor.CreateAutorDTO;
+import io.github.marcos.libraryapi.dto.autor.UpdateAutorDTO;
 import io.github.marcos.libraryapi.services.AutorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

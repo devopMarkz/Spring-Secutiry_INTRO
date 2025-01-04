@@ -1,7 +1,7 @@
 package io.github.marcos.libraryapi.controllers.handlers;
 
-import io.github.marcos.libraryapi.dto.ErroCampo;
-import io.github.marcos.libraryapi.dto.ErroResposta;
+import io.github.marcos.libraryapi.dto.erro.ErroCampo;
+import io.github.marcos.libraryapi.dto.erro.ErroResposta;
 import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
