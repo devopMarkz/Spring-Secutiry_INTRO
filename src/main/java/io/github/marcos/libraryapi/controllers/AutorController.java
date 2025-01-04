@@ -39,7 +39,7 @@ public class AutorController {
     @GetMapping
     public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", required = false) String nome,
                                                                       @RequestParam(name = "nacionalidade", required = false) String nacionalidade){
-        var autores = autorService.findByFilters(nome, nacionalidade);
+        var autores = autorService.pesquisaByExample(nome, nacionalidade);
         return ResponseEntity.ok(autores);
     }
 

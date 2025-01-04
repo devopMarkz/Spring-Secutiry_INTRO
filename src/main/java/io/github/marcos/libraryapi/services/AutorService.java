@@ -10,6 +10,8 @@ import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +44,7 @@ public class AutorService {
         return new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade());
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public List<AutorResponseDTO> findByFilters(String nome, String nacionalidade){
         if(nome != null && nacionalidade != null) {
             return autorRepository.findByNomeAndNacionalidade(nome, nacionalidade).stream()
@@ -62,6 +64,14 @@ public class AutorService {
         return autorRepository.findAll().stream()
                 .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
                 .toList();
+    }*/
+
+    @Transactional(readOnly = true)
+    public List<AutorResponseDTO> pesquisaByExample(String nome, String nacionalidade){
+        Autor autor = new Autor(null, nome, null, nacionalidade);
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreCase().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Autor> example = Example.of(autor, exampleMatcher);
+        return autorRepository.findAll(example).stream().map(aut -> new AutorResponseDTO(aut.getId(), aut.getNome(), aut.getDataNascimento(), aut.getNacionalidade())).toList();
     }
 
     @Transactional
