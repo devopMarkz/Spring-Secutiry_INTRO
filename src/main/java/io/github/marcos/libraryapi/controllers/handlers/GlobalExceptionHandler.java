@@ -7,6 +7,7 @@ import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,6 +46,12 @@ public class GlobalExceptionHandler {
             erro.erros().add(new ErroCampo(f.getField(), f.getDefaultMessage()));
         }
         return ResponseEntity.status(status).body(erro);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErroResposta> httpMessageNotReadable(HttpMessageNotReadableException e){
+        ErroResposta erro = ErroResposta.respostaPadrao("Corpo da requisição inválido.");
+        return ResponseEntity.status(erro.status()).body(erro);
     }
 
 }
