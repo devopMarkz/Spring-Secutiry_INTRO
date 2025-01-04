@@ -4,6 +4,7 @@ import io.github.marcos.libraryapi.dto.AutorResponseDTO;
 import io.github.marcos.libraryapi.dto.CreateAutorDTO;
 import io.github.marcos.libraryapi.dto.UpdateAutorDTO;
 import io.github.marcos.libraryapi.services.AutorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class AutorController {
     private AutorService autorService;
 
     @PostMapping
-    public ResponseEntity<Void> salvar(@RequestBody CreateAutorDTO createAutorDTO){
+    public ResponseEntity<Void> salvar(@Valid @RequestBody CreateAutorDTO createAutorDTO){
         AutorResponseDTO autorResponseDTO = autorService.insert(createAutorDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -49,7 +50,7 @@ public class AutorController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarPorId(@PathVariable("id") String id, @RequestBody UpdateAutorDTO dto){
+    public ResponseEntity<Void> atualizarPorId(@PathVariable("id") String id, @Valid @RequestBody UpdateAutorDTO dto){
         autorService.updateById(id, dto);
         return ResponseEntity.noContent().build();
     }

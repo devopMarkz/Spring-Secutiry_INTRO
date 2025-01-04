@@ -1,14 +1,18 @@
 package io.github.marcos.libraryapi.controllers.handlers;
 
+import io.github.marcos.libraryapi.dto.ErroCampo;
 import io.github.marcos.libraryapi.dto.ErroResposta;
 import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
@@ -31,6 +35,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResposta> operacaoNaoPermitida(OperacaoNaoPermitidaException e){
         ErroResposta erroResposta = ErroResposta.respostaPadrao(e.getMessage());
         return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErroResposta> methodArgumentNotValid(MethodArgumentNotValidException e){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResposta erro = new ErroResposta(status.value(), "Erro de validação de dados.", new ArrayList<>());
+        for (FieldError f : e.getFieldErrors()){
+            erro.erros().add(new ErroCampo(f.getField(), f.getDefaultMessage()));
+        }
+        return ResponseEntity.status(status).body(erro);
     }
 
 }
