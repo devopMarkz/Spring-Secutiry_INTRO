@@ -5,7 +5,10 @@ import io.github.marcos.libraryapi.dto.CreateAutorDTO;
 import io.github.marcos.libraryapi.dto.UpdateAutorDTO;
 import io.github.marcos.libraryapi.model.Autor;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
+import io.github.marcos.libraryapi.repositories.LivroRepository;
+import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
+import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +22,14 @@ public class AutorService {
     @Autowired
     private AutorRepository autorRepository;
 
+    @Autowired
+    private LivroRepository livroRepository;
+
     @Transactional
     public AutorResponseDTO insert(CreateAutorDTO createAutorDTO){
+        if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidade(createAutorDTO.nome(), createAutorDTO.dataNascimento(), createAutorDTO.nacionalidade())){
+            throw new AutorDuplicadoException("Autor duplicado.");
+        }
         Autor autor = createAutorDTO.mapearParaAutor();
         Autor novoAutor = autorRepository.save(autor);
         return new AutorResponseDTO(novoAutor.getId(), novoAutor.getNome(), novoAutor.getDataNascimento(), novoAutor.getNacionalidade());
@@ -59,12 +68,22 @@ public class AutorService {
     public void deleteById(String id){
         var idAutor = UUID.fromString(id);
         Autor autor = autorRepository.findById(idAutor).orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
+        if(possuiLivro(autor)){
+            throw new OperacaoNaoPermitidaException("Erro de integridade referencial.");
+        }
         autorRepository.deleteById(autor.getId());
+    }
+
+    private boolean possuiLivro(Autor autor) {
+        return livroRepository.existsByAutor(autor);
     }
 
     @Transactional
     public void updateById(String id, UpdateAutorDTO updateAutorDTO){
         var idAutor = UUID.fromString(id);
+        if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidade(updateAutorDTO.getNome(), updateAutorDTO.getDataNascimento(), updateAutorDTO.getNacionalidade())){
+            throw new AutorDuplicadoException("Autor duplicado.");
+        }
         Autor autor = autorRepository.findById(idAutor).orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
         autor.setNome(updateAutorDTO.getNome());
         autor.setDataNascimento(updateAutorDTO.getDataNascimento());
