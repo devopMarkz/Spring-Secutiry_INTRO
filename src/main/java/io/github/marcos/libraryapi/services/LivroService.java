@@ -8,6 +8,7 @@ import io.github.marcos.libraryapi.model.Livro;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
 import io.github.marcos.libraryapi.repositories.LivroRepository;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
+import io.github.marcos.libraryapi.services.exceptions.LivroDuplicadoException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +25,9 @@ public class LivroService {
     public LivroResponseDTO insert(CreateLivroDTO createLivroDTO){
         Autor autor = autorRepository.findById(createLivroDTO.idAutor())
                 .orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
+        if(livroRepository.existsByIsbn(createLivroDTO.isbn())) {
+            throw new LivroDuplicadoException("Livro com esse ISBN já existente.");
+        }
         Livro livro = new Livro(null, createLivroDTO.isbn(), createLivroDTO.titulo(), createLivroDTO.dataPublicacao(), createLivroDTO.genero(), createLivroDTO.preco(), autor);
         Livro novoLivro = livroRepository.save(livro);
         AutorResponseDTO autorResponseDTO = AutorResponseDTO.convertToAutorResponseDto(novoLivro.getAutor());

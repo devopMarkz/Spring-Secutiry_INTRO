@@ -4,6 +4,7 @@ import io.github.marcos.libraryapi.dto.erro.ErroCampo;
 import io.github.marcos.libraryapi.dto.erro.ErroResposta;
 import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
+import io.github.marcos.libraryapi.services.exceptions.LivroDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResposta> httpMessageNotReadable(HttpMessageNotReadableException e){
         ErroResposta erro = ErroResposta.respostaPadrao("Corpo da requisição inválido.");
         return ResponseEntity.status(erro.status()).body(erro);
+    }
+
+    @ExceptionHandler(LivroDuplicadoException.class)
+    public ResponseEntity<ErroResposta> livroDuplicado(LivroDuplicadoException e){
+        ErroResposta erroResposta = ErroResposta.conflito(e.getMessage());
+        return ResponseEntity.status(erroResposta.status()).body(erroResposta);
     }
 
 }
