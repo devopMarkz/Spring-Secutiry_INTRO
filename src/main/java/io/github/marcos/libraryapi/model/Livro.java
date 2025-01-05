@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class Livro {
     private GeneroLivro genero;
 
     @Column(name = "preco")
-    private Double preco;
+    private BigDecimal preco;
 
     @ManyToOne
     @JoinColumn(name = "id_autor")
@@ -52,7 +53,7 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(UUID id, String isbn, String titulo, LocalDate dataPublicacao, GeneroLivro genero, Double preco, Autor autor) {
+    public Livro(UUID id, String isbn, String titulo, LocalDate dataPublicacao, GeneroLivro genero, BigDecimal preco, Autor autor) {
         this.id = id;
         this.isbn = isbn;
         this.titulo = titulo;
@@ -102,11 +103,11 @@ public class Livro {
         this.genero = genero;
     }
 
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
