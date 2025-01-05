@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/autores")
-public class AutorController {
+public class AutorController implements GenericController {
 
     @Autowired
     private AutorService autorService;
@@ -23,10 +23,7 @@ public class AutorController {
     @PostMapping
     public ResponseEntity<Void> salvar(@Valid @RequestBody CreateAutorDTO createAutorDTO){
         AutorResponseDTO autorResponseDTO = autorService.insert(createAutorDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(autorResponseDTO.id())
-                .toUri();
+        URI location = gerarHeaderLocation(autorResponseDTO.id());
         return ResponseEntity.created(location).build();
     }
 

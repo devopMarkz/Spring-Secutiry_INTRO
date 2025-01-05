@@ -16,7 +16,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/livros")
-public class LivroController {
+public class LivroController implements GenericController {
 
     @Autowired
     private LivroService livroService;
@@ -24,7 +24,7 @@ public class LivroController {
     @PostMapping
     public ResponseEntity<LivroResponseDTO> salvar(@Valid @RequestBody CreateLivroDTO createLivroDTO){
         LivroResponseDTO livroResponseDTO = livroService.insert(createLivroDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(livroResponseDTO.id()).toUri();
+        URI location = gerarHeaderLocation(livroResponseDTO.id());
         return ResponseEntity.created(location).body(livroResponseDTO);
     }
 
