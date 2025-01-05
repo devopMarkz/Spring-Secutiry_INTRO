@@ -6,10 +6,7 @@ import io.github.marcos.libraryapi.services.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -22,10 +19,16 @@ public class LivroController implements GenericController {
     private LivroService livroService;
 
     @PostMapping
-    public ResponseEntity<LivroResponseDTO> salvar(@Valid @RequestBody CreateLivroDTO createLivroDTO){
+    public ResponseEntity<Void> salvar(@Valid @RequestBody CreateLivroDTO createLivroDTO){
         LivroResponseDTO livroResponseDTO = livroService.insert(createLivroDTO);
         URI location = gerarHeaderLocation(livroResponseDTO.id());
-        return ResponseEntity.created(location).body(livroResponseDTO);
+        return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LivroResponseDTO> obterDetalhes(@PathVariable String id){
+        LivroResponseDTO livroResponseDTO = livroService.findById(id);
+        return ResponseEntity.ok(livroResponseDTO);
     }
 
 }
