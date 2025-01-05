@@ -44,28 +44,6 @@ public class AutorService {
         return new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade());
     }
 
-    /*@Transactional(readOnly = true)
-    public List<AutorResponseDTO> findByFilters(String nome, String nacionalidade){
-        if(nome != null && nacionalidade != null) {
-            return autorRepository.findByNomeAndNacionalidade(nome, nacionalidade).stream()
-                    .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
-                    .toList();
-        }
-        if(nome != null){
-            return autorRepository.findByNome(nome).stream()
-                    .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
-                    .toList();
-        }
-        if(nacionalidade != null){
-            return autorRepository.findByNacionalidade(nacionalidade).stream()
-                    .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
-                    .toList();
-        }
-        return autorRepository.findAll().stream()
-                .map(autor -> new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()))
-                .toList();
-    }*/
-
     @Transactional(readOnly = true)
     public List<AutorResponseDTO> pesquisaByExample(String nome, String nacionalidade){
         Autor autor = new Autor(null, nome, null, nacionalidade);
