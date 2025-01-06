@@ -2,10 +2,7 @@ package io.github.marcos.libraryapi.controllers.handlers;
 
 import io.github.marcos.libraryapi.dto.erro.ErroCampo;
 import io.github.marcos.libraryapi.dto.erro.ErroResposta;
-import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
-import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
-import io.github.marcos.libraryapi.services.exceptions.LivroDuplicadoException;
-import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
+import io.github.marcos.libraryapi.services.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -59,6 +56,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResposta> livroDuplicado(LivroDuplicadoException e){
         ErroResposta erroResposta = ErroResposta.conflito(e.getMessage());
         return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+    }
+
+    @ExceptionHandler(LivroInexistenteException.class)
+    public ResponseEntity<ErroResposta> livroInexistente(LivroInexistenteException e){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErroResposta erroResposta = new ErroResposta(status.value(), e.getMessage(), List.of());
+        return ResponseEntity.status(status.value()).body(erroResposta);
     }
 
 }

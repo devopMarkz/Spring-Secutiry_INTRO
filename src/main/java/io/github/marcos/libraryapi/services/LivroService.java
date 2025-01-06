@@ -45,4 +45,10 @@ public class LivroService {
         return new LivroResponseDTO(livro.getId(), livro.getIsbn(), livro.getTitulo(), livro.getDataPublicacao(), livro.getGenero(), livro.getPreco(), autorResponseDTO);
     }
 
+    @Transactional
+    public void deleteById(String id){
+        var idLivro = UUID.fromString(id);
+        livroRepository.deleteById(idLivro);
+    }
+
 }

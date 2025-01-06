@@ -31,4 +31,10 @@ public class LivroController implements GenericController {
         return ResponseEntity.ok(livroResponseDTO);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPorId(@PathVariable String id){
+        livroService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
