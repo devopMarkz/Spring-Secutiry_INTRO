@@ -47,9 +47,18 @@ public class AutorService {
     @Transactional(readOnly = true)
     public List<AutorResponseDTO> pesquisaByExample(String nome, String nacionalidade){
         Autor autor = new Autor(null, nome, null, nacionalidade);
-        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreCase().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
         Example<Autor> example = Example.of(autor, exampleMatcher);
-        return autorRepository.findAll(example).stream().map(aut -> new AutorResponseDTO(aut.getId(), aut.getNome(), aut.getDataNascimento(), aut.getNacionalidade())).toList();
+
+        return autorRepository.findAll(example)
+                .stream()
+                .map(aut -> new AutorResponseDTO(aut.getId(), aut.getNome(), aut.getDataNascimento(), aut.getNacionalidade()))
+                .toList();
     }
 
     @Transactional
