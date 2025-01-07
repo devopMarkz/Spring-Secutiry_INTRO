@@ -43,12 +43,14 @@ public class LivroController implements GenericController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LivroResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "isbn", required = false) String isbn,
+    public ResponseEntity<Page<LivroResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "isbn", required = false) String isbn,
                                                                       @RequestParam(name = "titulo", required = false) String titulo,
                                                                       @RequestParam(name = "nome-autor", required = false) String nomeAutor,
                                                                       @RequestParam(name = "genero", required = false) GeneroLivro genero,
-                                                                      @RequestParam(name = "ano-publicacao", required = false) Integer anoPublicacao) {
-        List<LivroResponseDTO> livroResponseDTOS = livroService.findByFilters(isbn, titulo, nomeAutor, genero, anoPublicacao);
+                                                                      @RequestParam(name = "ano-publicacao", required = false) Integer anoPublicacao,
+                                                                      @RequestParam(name = "pagina", defaultValue = "0") Integer pagina,
+                                                                      @RequestParam(name = "tamanho-pagina", defaultValue = "5") Integer tamanhoPagina) {
+        Page<LivroResponseDTO> livroResponseDTOS = livroService.findByFilters(isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
         return ResponseEntity.ok(livroResponseDTOS);
     }
 

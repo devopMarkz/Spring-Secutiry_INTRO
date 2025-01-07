@@ -13,6 +13,7 @@ import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException
 import io.github.marcos.libraryapi.services.exceptions.LivroDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.LivroInexistenteException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,9 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public List<LivroResponseDTO> findByFilters(String isbn, String titulo, String nomeAutor, GeneroLivro genero, Integer anoPublicacao){
+    public Page<LivroResponseDTO> findByFilters(String isbn, String titulo, String nomeAutor, GeneroLivro genero, Integer anoPublicacao, Integer pagina, Integer tamanhoPagina){
+
+        Pageable pageable = PageRequest.of(pagina, tamanhoPagina);
 
         Specification<Livro> spec = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.conjunction());
 
@@ -68,9 +71,9 @@ public class LivroService {
         if(anoPublicacao != null) spec.and(LivroSpecifications.anoPublicacaoEqual(anoPublicacao));
         if(nomeAutor != null) spec.and(LivroSpecifications.nomeAutorLike(nomeAutor));
 
-        List<Livro> livros = livroRepository.findAll(spec).stream().toList();
+        Page<Livro> livros = livroRepository.findAll(spec, pageable);
 
-        return livros.stream().map(livro -> new LivroResponseDTO(livro.getId(), livro.getIsbn(), livro.getTitulo(), livro.getDataPublicacao(), livro.getGenero(), livro.getPreco(), AutorResponseDTO.convertToAutorResponseDto(livro.getAutor()))).toList();
+        return livros.map(livro -> new LivroResponseDTO(livro.getId(), livro.getIsbn(), livro.getTitulo(), livro.getDataPublicacao(), livro.getGenero(), livro.getPreco(), AutorResponseDTO.convertToAutorResponseDto(livro.getAutor())));
     }
 
     @Transactional
