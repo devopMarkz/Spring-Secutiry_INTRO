@@ -73,4 +73,21 @@ public class LivroService {
         return livros.stream().map(livro -> new LivroResponseDTO(livro.getId(), livro.getIsbn(), livro.getTitulo(), livro.getDataPublicacao(), livro.getGenero(), livro.getPreco(), AutorResponseDTO.convertToAutorResponseDto(livro.getAutor()))).toList();
     }
 
+    @Transactional
+    public void update(String id, CreateLivroDTO updateDTO){
+        var idLivro = UUID.fromString(id);
+
+        Autor autor = autorRepository.findById(updateDTO.idAutor()).orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
+        Livro livro = livroRepository.findById(idLivro).orElseThrow(() -> new LivroInexistenteException("Livro inexistente."));
+
+        livro.setIsbn(updateDTO.isbn() == null? livro.getIsbn() : updateDTO.isbn());
+        livro.setTitulo(updateDTO.titulo() == null? livro.getTitulo() : updateDTO.titulo());
+        livro.setDataPublicacao(updateDTO.dataPublicacao() == null? livro.getDataPublicacao() : updateDTO.dataPublicacao());
+        livro.setGenero(updateDTO.genero() == null? livro.getGenero() : updateDTO.genero());
+        livro.setPreco(updateDTO.preco() == null? livro.getPreco() : updateDTO.preco());
+        livro.setAutor(autor);
+
+        livroRepository.save(livro);
+    }
+
 }

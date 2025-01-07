@@ -51,4 +51,10 @@ public class LivroController implements GenericController {
         List<LivroResponseDTO> livroResponseDTOS = livroService.findByFilters(isbn, titulo, nomeAutor, genero, anoPublicacao);
         return ResponseEntity.ok(livroResponseDTOS);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> atualizarPorId(@PathVariable String id, @RequestBody @Valid CreateLivroDTO createLivroDTO){
+        livroService.update(id, createLivroDTO);
+        return ResponseEntity.noContent().build();
+    }
 }
