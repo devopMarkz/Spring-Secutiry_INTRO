@@ -29,10 +29,11 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(UUID id, String login, String senha) {
+    public Usuario(UUID id, String login, String senha, List<String> roles) {
         this.id = id;
         this.login = login;
         this.senha = senha;
+        this.roles = roles;
     }
 
     public UUID getId() {
