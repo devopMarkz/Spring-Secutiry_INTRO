@@ -1,5 +1,7 @@
 package io.github.marcos.libraryapi.config;
 
+import io.github.marcos.libraryapi.services.CustomUserDetailsService;
+import io.github.marcos.libraryapi.services.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -42,22 +44,10 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder){
-        UserDetails user1 = User.builder()
-                .username("usuario")
-                .password(passwordEncoder().encode("123"))
-                .roles("USER")
-                .build();
-
-        UserDetails user2 = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("321"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(UsuarioService usuarioService){
+//        return new CustomUserDetailsService(usuarioService);
+//    }
 
 
 }
