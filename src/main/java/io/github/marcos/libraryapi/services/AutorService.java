@@ -46,7 +46,7 @@ public class AutorService {
         Usuario usuario = securityService.obterUsuarioLogado();
 
         Autor autor = createAutorDTO.mapearParaAutor();
-        autor.setIdUsuario(usuario.getId());
+        autor.setUsuario(usuario);
 
         Autor novoAutor = autorRepository.save(autor);
         return new AutorResponseDTO(novoAutor.getId(), novoAutor.getNome(), novoAutor.getDataNascimento(), novoAutor.getNacionalidade());

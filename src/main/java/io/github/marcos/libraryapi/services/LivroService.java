@@ -6,6 +6,7 @@ import io.github.marcos.libraryapi.dto.livro.LivroResponseDTO;
 import io.github.marcos.libraryapi.model.Autor;
 import io.github.marcos.libraryapi.model.GeneroLivro;
 import io.github.marcos.libraryapi.model.Livro;
+import io.github.marcos.libraryapi.model.Usuario;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
 import io.github.marcos.libraryapi.repositories.LivroRepository;
 import io.github.marcos.libraryapi.repositories.specs.LivroSpecifications;
@@ -27,10 +28,12 @@ public class LivroService {
 
     private LivroRepository livroRepository;
     private AutorRepository autorRepository;
+    private SecurityService securityService;
 
-    public LivroService(LivroRepository livroRepository, AutorRepository autorRepository) {
+    public LivroService(LivroRepository livroRepository, AutorRepository autorRepository, SecurityService securityService) {
         this.livroRepository = livroRepository;
         this.autorRepository = autorRepository;
+        this.securityService = securityService;
     }
 
     @Transactional
@@ -38,7 +41,9 @@ public class LivroService {
         Autor autor = autorRepository.findById(createLivroDTO.idAutor())
                 .orElseThrow(() -> new AutorInexistenteException("Autor inexistente."));
         if(livroRepository.existsByIsbn(createLivroDTO.isbn())) throw new LivroDuplicadoException("Livro com esse ISBN já existente.");
+        Usuario usuarioLogado = securityService.obterUsuarioLogado();
         Livro livro = new Livro(null, createLivroDTO.isbn(), createLivroDTO.titulo(), createLivroDTO.dataPublicacao(), createLivroDTO.genero(), createLivroDTO.preco(), autor);
+        livro.setUsuario(usuarioLogado);
         Livro novoLivro = livroRepository.save(livro);
         AutorResponseDTO autorResponseDTO = AutorResponseDTO.convertToAutorResponseDto(novoLivro.getAutor());
         return new LivroResponseDTO(novoLivro.getId(), novoLivro.getIsbn(), novoLivro.getTitulo(), novoLivro.getDataPublicacao(), novoLivro.getGenero(), novoLivro.getPreco(), autorResponseDTO);
