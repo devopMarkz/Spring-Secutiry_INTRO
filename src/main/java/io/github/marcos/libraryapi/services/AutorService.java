@@ -4,14 +4,18 @@ import io.github.marcos.libraryapi.dto.autor.AutorResponseDTO;
 import io.github.marcos.libraryapi.dto.autor.CreateAutorDTO;
 import io.github.marcos.libraryapi.dto.autor.UpdateAutorDTO;
 import io.github.marcos.libraryapi.model.Autor;
+import io.github.marcos.libraryapi.model.Usuario;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
 import io.github.marcos.libraryapi.repositories.LivroRepository;
+import io.github.marcos.libraryapi.repositories.UsuarioRepository;
 import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,18 +25,29 @@ import java.util.UUID;
 @Service
 public class AutorService {
 
-    @Autowired
     private AutorRepository autorRepository;
-
-    @Autowired
     private LivroRepository livroRepository;
+    private UsuarioService usuarioService;
+    private SecurityService securityService;
+
+    public AutorService(AutorRepository autorRepository, LivroRepository livroRepository, UsuarioService usuarioService, SecurityService securityService) {
+        this.autorRepository = autorRepository;
+        this.livroRepository = livroRepository;
+        this.usuarioService = usuarioService;
+        this.securityService = securityService;
+    }
 
     @Transactional
     public AutorResponseDTO insert(CreateAutorDTO createAutorDTO){
         if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidade(createAutorDTO.nome(), createAutorDTO.dataNascimento(), createAutorDTO.nacionalidade())){
             throw new AutorDuplicadoException("Autor duplicado.");
         }
+
+        Usuario usuario = securityService.obterUsuarioLogado();
+
         Autor autor = createAutorDTO.mapearParaAutor();
+        autor.setIdUsuario(usuario.getId());
+
         Autor novoAutor = autorRepository.save(autor);
         return new AutorResponseDTO(novoAutor.getId(), novoAutor.getNome(), novoAutor.getDataNascimento(), novoAutor.getNacionalidade());
     }
