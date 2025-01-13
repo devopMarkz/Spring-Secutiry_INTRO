@@ -21,15 +21,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .formLogin(configuration -> {
-                    configuration.loginPage("/login").permitAll();
-                })
+//                .formLogin(configuration -> {
+//                    configuration.loginPage("/login").permitAll();
+//                })
+                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth-> {
                     auth.requestMatchers("/login/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
