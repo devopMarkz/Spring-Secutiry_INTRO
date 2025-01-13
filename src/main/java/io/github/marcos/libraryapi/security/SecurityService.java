@@ -1,6 +1,7 @@
-package io.github.marcos.libraryapi.services;
+package io.github.marcos.libraryapi.security;
 
 import io.github.marcos.libraryapi.model.Usuario;
+import io.github.marcos.libraryapi.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

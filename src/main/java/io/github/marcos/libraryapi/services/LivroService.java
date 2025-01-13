@@ -10,6 +10,7 @@ import io.github.marcos.libraryapi.model.Usuario;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
 import io.github.marcos.libraryapi.repositories.LivroRepository;
 import io.github.marcos.libraryapi.repositories.specs.LivroSpecifications;
+import io.github.marcos.libraryapi.security.SecurityService;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
 import io.github.marcos.libraryapi.services.exceptions.LivroDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.LivroInexistenteException;
@@ -20,7 +21,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

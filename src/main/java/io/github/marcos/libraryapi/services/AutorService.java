@@ -7,15 +7,12 @@ import io.github.marcos.libraryapi.model.Autor;
 import io.github.marcos.libraryapi.model.Usuario;
 import io.github.marcos.libraryapi.repositories.AutorRepository;
 import io.github.marcos.libraryapi.repositories.LivroRepository;
-import io.github.marcos.libraryapi.repositories.UsuarioRepository;
+import io.github.marcos.libraryapi.security.SecurityService;
 import io.github.marcos.libraryapi.services.exceptions.AutorDuplicadoException;
 import io.github.marcos.libraryapi.services.exceptions.AutorInexistenteException;
 import io.github.marcos.libraryapi.services.exceptions.OperacaoNaoPermitidaException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
