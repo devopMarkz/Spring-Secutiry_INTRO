@@ -3,6 +3,7 @@ package io.github.marcos.libraryapi.security;
 import io.github.marcos.libraryapi.model.Usuario;
 import io.github.marcos.libraryapi.services.UsuarioService;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,6 +39,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return CustomAuthenticationProvider.class.isAssignableFrom(authentication);
+        return authentication.isAssignableFrom(UsernamePasswordAuthenticationToken.class);
     }
 }
