@@ -22,6 +22,9 @@ public class Usuario {
     @Column(name = "senha")
     private String senha;
 
+    @Column
+    private String email;
+
     @Type(ListArrayType.class)
     @Column(name = "roles", columnDefinition = "varchar[]")
     private List<String> roles;
@@ -33,6 +36,14 @@ public class Usuario {
         this.id = id;
         this.login = login;
         this.senha = senha;
+        this.roles = roles;
+    }
+
+    public Usuario(UUID id, String login, String senha, String email, List<String> roles) {
+        this.id = id;
+        this.login = login;
+        this.senha = senha;
+        this.email = email;
         this.roles = roles;
     }
 

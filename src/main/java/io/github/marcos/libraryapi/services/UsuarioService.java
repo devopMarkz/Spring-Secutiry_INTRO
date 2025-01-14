@@ -24,7 +24,7 @@ public class UsuarioService {
     public void salvar(UsuarioDTO usuarioDTO){
         var senha = usuarioDTO.senha();
         var senhaCriptografada = passwordEncoder.encode(senha);
-        Usuario usuario = new Usuario(null, usuarioDTO.login(), senhaCriptografada, new ArrayList<>());
+        Usuario usuario = new Usuario(null, usuarioDTO.login(), senhaCriptografada, usuarioDTO.email(), new ArrayList<>());
         usuarioDTO.roles().forEach(s -> usuario.getRoles().add(s));
         usuarioRepository.save(usuario);
     }
