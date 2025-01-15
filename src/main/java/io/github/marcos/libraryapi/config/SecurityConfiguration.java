@@ -1,5 +1,6 @@
 package io.github.marcos.libraryapi.config;
 
+import io.github.marcos.libraryapi.security.LoginSocialSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,19 +20,20 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, LoginSocialSuccessHandler successHandler) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-//                .formLogin(configuration -> {
-//                    configuration.loginPage("/login").permitAll();
-//                })
-                .formLogin(Customizer.withDefaults())
+                .formLogin(configuration -> {
+                    configuration.loginPage("/login").permitAll();
+                })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth-> {
                     auth.requestMatchers("/login/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/login").successHandler(successHandler);
+                })
                 .build();
     }
 

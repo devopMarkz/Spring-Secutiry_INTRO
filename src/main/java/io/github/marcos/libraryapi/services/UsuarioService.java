@@ -33,4 +33,8 @@ public class UsuarioService {
         return usuarioRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente."));
     }
 
+    public Usuario obterPorEmail(String email){
+        return usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente."));
+    }
+
 }
