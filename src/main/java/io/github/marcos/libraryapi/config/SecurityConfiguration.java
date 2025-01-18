@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .oauth2Login(oauth2 -> {
                     oauth2.loginPage("/login").successHandler(successHandler);
                 })
+                .oauth2ResourceServer(oAuth2RS-> oAuth2RS.jwt(Customizer.withDefaults()))
                 .build();
     }
 
