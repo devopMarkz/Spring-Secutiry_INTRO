@@ -22,14 +22,17 @@ public class JwtCustomAuthenticationFilter extends OncePerRequestFilter {
     private UsuarioService usuarioService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication instanceof JwtAuthenticationToken){
+        if (authentication != null && authentication instanceof JwtAuthenticationToken) {
             String login = authentication.getName();
             Usuario usuario = usuarioService.obterPorLogin(login);
-            if(usuario != null){
+            if (usuario != null) {
                 authentication = new CustomAuthentication(usuario);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
