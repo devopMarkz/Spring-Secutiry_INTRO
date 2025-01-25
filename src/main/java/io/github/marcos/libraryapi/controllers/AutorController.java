@@ -41,6 +41,11 @@ public class AutorController implements GenericController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
+    @Operation(summary = "Obter Detalhes", description = "Retorna os dados do autor pelo ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autor encontrado."),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado.")
+    })
     public ResponseEntity<AutorResponseDTO> obterDetalhes(@PathVariable("id") String id){
         var autorDTO = autorService.findById(id);
         return ResponseEntity.ok(autorDTO);
@@ -48,6 +53,10 @@ public class AutorController implements GenericController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
+    @Operation(summary = "Pesquisar", description = "Pesquisa um autor por filtros.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Sucesso.")
+    })
     public ResponseEntity<List<AutorResponseDTO>> pesquisarPorFiltros(@RequestParam(name = "nome", required = false) String nome,
                                                                       @RequestParam(name = "nacionalidade", required = false) String nacionalidade){
         var autores = autorService.pesquisaByExample(nome, nacionalidade);
@@ -56,6 +65,12 @@ public class AutorController implements GenericController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('GERENTE')")
+    @Operation(summary = "Deletar", description = "Deleta um Autor existente.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Autor encontrado."),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado."),
+            @ApiResponse(responseCode = "400", description = "Autor possui livro cadastrado.")
+    })
     public ResponseEntity<Void> deletarPorId(@PathVariable("id") String id){
         autorService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -63,6 +78,12 @@ public class AutorController implements GenericController {
     
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('GERENTE')")
+    @Operation(summary = "Atualizar", description = "Atualiza um autor existente.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Atualizado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado."),
+            @ApiResponse(responseCode = "409", description = "Autor já cadastrado.")
+    })
     public ResponseEntity<Void> atualizarPorId(@PathVariable("id") String id, @Valid @RequestBody UpdateAutorDTO dto){
         autorService.updateById(id, dto);
         return ResponseEntity.noContent().build();
